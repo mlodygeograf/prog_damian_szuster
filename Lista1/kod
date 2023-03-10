@@ -1,1 +1,260 @@
+import numpy as np
 
+class Vector:
+    
+    """
+    Klasa przechowująca kolekcję liczb.
+    """
+
+    def __init__(self, vector_size):
+        
+        """
+        Metoda definiująca pusty wektor o zadanym rozmiarze.
+        
+        Parametry:
+        ----------
+        vector_size - int:
+            długość wektora
+        """
+        self.vector_size = vector_size
+        self.vector = []
+        for i in range(vector_size):
+            self.vector.append(None)
+
+    def vec_generator(self):
+        """
+        Metoda generująca elementy wektora w sposób losowy z rozkładu jednostajnego ciągłego na odcinku [-10000,10000].
+        """
+        for i in range(self.vector_size):
+            k = np.random.poisson(10)
+            self.vector[i] = k
+    
+    def vec_items(self, array):
+        """
+        Metoda wczytująca elementy wektora z podanej listy.
+        
+        Parametry:
+        ----------
+        array - list:
+            lista elementów wektora
+        """
+        for i in range(len(array)):
+            self.vector[i] = array[i]
+
+    def __add__(self, vec):
+        """
+        Operator dodawania dwóch wektorów.
+        
+        Parametry:
+        ----------
+        vec - list:
+            wektor
+        
+        Produkty operacji:
+        ------------------
+        a - list:
+            suma dwóch wektorów
+        """
+        try:
+            a = Vector(self.vector_size)
+            for i in range(self.vector_size):
+                a.vector[i] = self.vector[i] + vec.vector[i]
+            return a
+        except:
+            raise ValueError("Błąd: wektory są różnych rozmiarów!")
+
+    def __sub__(self, vec):
+        """
+        Operator odejmowania dwóch wektorów.
+        
+        Parametry:
+        ----------
+        vec - list:
+            wektor
+        
+        Produkty operacji:
+        ------------------
+        w - list:
+            różnica dwóch wektorów
+        """
+        try:
+            w = Vector(self.vector_size)
+            for i in range(self.vector_size):
+                w.vector[i] = self.vector[i] - vec.vector[i]
+            return w
+        except:
+            raise ValueError("Błąd: wektory są różnych rozmiarów!")
+
+    def __mul__(self, scalar):
+        """
+        Operator mnożenia wektora przez skalar.
+        
+        Parametry:
+        ----------
+        scalar - float:
+            skalar
+        
+        Produkty operacji:
+        ------------------
+        w - list:
+            iloczyn wektora i skalara
+        """
+        w = Vector(self.vector_size)
+        for i in range(self.vector_size):
+            w.vector[i] = self.vector[i] * scalar
+        return w
+
+    def __rmul__(self, scalar):
+        """
+        Operator mnożenia wektora przez skalar.
+        
+        Parametry:
+        ----------
+        scalar - float:
+            skalar
+        
+        Produkty operacji:
+        ------------------
+        w - list:
+            iloczyn wektora i skalara
+        """
+        w = Vector(self.vector_size)
+        for i in range(self.vector_size):
+            w.vector[i] = scalar * self.vector[i]
+        return w
+    
+    def vec_length(self):
+        """
+        Metoda wyznaczająca długość wektora.
+        
+        Produkty operacji:
+        ------------------
+        vec_length - float:
+            długość wektora
+        """
+        sq_sum = 0
+        for i in self.vector:
+            sq_sum += i**2
+        vec_length = np.sqrt(sq_sum)
+        return vec_length
+    
+    def elements_sum(self):
+        """
+        Metoda sumująca elementy wektora.
+        
+        Produkty operacji:
+        ------------------
+        summ - float:
+            suma elementów wektora
+        """
+        summ = 0
+        for i in self.vector:
+            summ += i
+        return summ
+    
+    def dot_product(self, vector):
+        """
+        Metoda obliczająca iloczyn skalarny dwóch wektorów.
+        
+        Parametry:
+        ----------
+        vector - list:
+            wektor
+        
+        Produkty operacji:
+        ------------------
+        dot_p - float:
+            iloczyn skalarny wektorów
+        """
+        dot_p = np.dot(self.vector, vector.vector)
+        return dot_p
+
+    def __str__(self):
+        """
+        Reprezentacja tekstowa wektora.
+        """
+        return '{}'.format(self.vector)
+    
+    def __getitem__(self,a):
+        """
+        Operator uzyskujący dostęp do wybranego elementu wektora.
+        
+        Parametry:
+        ----------
+        a - int:
+            indeks elementu, który chcemy uzyskać
+        """
+        return self.vector[a]
+    
+    def __contains__(self,item):
+        """
+        Operator sprawdzający przynależność elementu do wektora
+        
+        Parametry:
+        ----------
+        item - float:
+            element, któreg przynależność jest sprawdzana
+        """
+        for i in self.vector:
+            if i==item:
+                return True
+        return False
+        
+        
+#Testy klasy Vector
+
+print('Przykłady działania klasy Vector:')
+vector0=Vector(6)
+vector1=Vector(6)
+vector2=Vector(6)
+
+print('1) Losowa generacja elementów wektora:')
+vector0.vec_generator()
+print(vector0)
+
+print('2) Wczytywanie elementów wektora z listy podanej jako argument:')
+vector1.vec_items([1,2,3,4,5,6])
+vector2.vec_items([2,3,5,7,11,13])
+print(vector1)
+
+print('3) Dodawanie dwóch wektorów:')
+a = vector1 + vector2
+print(a)
+
+print('4) Odejmowanie dwóch wektorów:')
+s = vector1-vector2
+print(s)
+
+print('5) Mnożenie wektora przez skalar:')
+w = 5 * vector1
+print(w)
+v = vector2 * (-4)
+print(v)
+
+print('6) Metoda wyliczająca długość wektora:')
+l = vector1.vec_length()
+print(l)
+
+print('7) Metoda wyliczająca sumę elementów wektora:')
+suma = vector1.elements_sum()
+print(suma)
+
+print('8) Metoda wyliczająca iloczyn skalarny dwóch wektorów:')
+sp = vector1.dot_product(vector2)
+print(sp)
+
+print('9) Reprezentacja tekstowa wektora:')
+v = vector1 + vector2
+z = vector0 * 0.6
+print(v)
+print(z)
+
+print('10) Dostęp do konkretnych elementów wektora:')
+v0 = vector1[0]
+print(v0)
+
+print('11) Sprawdzanie przynależności elementu do wektora:')
+v = 4 in vector1
+w = 8 in vector2
+print("Czy 4 należy do vector1? - " + str(v))
+print("Czy 8 należy do vector2? - " + str(w))
