@@ -36,9 +36,12 @@ class Vector:
         array - list:
             lista elementów wektora
         """
-        for i in range(len(array)):
-            self.vector[i] = array[i]
-
+        if self.vector_size == len(array):
+            for i in range(len(array)):
+                self.vector[i] = array[i]
+        else:
+            print("Błąd: niezgodne rozmiary!")
+            
     def __add__(self, vec):
         """
         Operator dodawania dwóch wektorów.
