@@ -1,13 +1,11 @@
 import numpy as np
 
 class Vector:
-    
     """
     Klasa przechowująca kolekcję liczb.
     """
 
     def __init__(self, vector_size):
-        
         """
         Metoda definiująca pusty wektor o zadanym rozmiarze.
         
@@ -23,13 +21,13 @@ class Vector:
 
     def vec_generator(self):
         """
-        Metoda generująca elementy wektora w sposób losowy z rozkładu jednostajnego ciągłego na odcinku [-10000,10000].
+        Metoda generująca elementy wektora w sposób losowy z rozkładu Poissona o parametrze lambda = 10.
         """
         for i in range(self.vector_size):
             k = np.random.poisson(10)
             self.vector[i] = k
     
-    def vec_items(self, array):
+    def vec_wczytaj(self, array):
         """
         Metoda wczytująca elementy wektora z podanej listy.
         
@@ -55,12 +53,12 @@ class Vector:
         a - list:
             suma dwóch wektorów
         """
-        try:
+        if self.vector_size == vec.vector_size:
             a = Vector(self.vector_size)
             for i in range(self.vector_size):
                 a.vector[i] = self.vector[i] + vec.vector[i]
             return a
-        except:
+        else:
             raise ValueError("Błąd: wektory są różnych rozmiarów!")
 
     def __sub__(self, vec):
@@ -74,15 +72,15 @@ class Vector:
         
         Produkty operacji:
         ------------------
-        w - list:
+        r - list:
             różnica dwóch wektorów
         """
-        try:
-            w = Vector(self.vector_size)
+        if self.vector_size == vec.vector_size:
+            r = Vector(self.vector_size)
             for i in range(self.vector_size):
-                w.vector[i] = self.vector[i] - vec.vector[i]
-            return w
-        except:
+                r.vector[i] = self.vector[i] - vec.vector[i]
+            return r
+        else:
             raise ValueError("Błąd: wektory są różnych rozmiarów!")
 
     def __mul__(self, scalar):
@@ -96,13 +94,13 @@ class Vector:
         
         Produkty operacji:
         ------------------
-        w - list:
+        p - list:
             iloczyn wektora i skalara
         """
-        w = Vector(self.vector_size)
+        p = Vector(self.vector_size)
         for i in range(self.vector_size):
-            w.vector[i] = self.vector[i] * scalar
-        return w
+            p.vector[i] = self.vector[i] * scalar
+        return p
 
     def __rmul__(self, scalar):
         """
@@ -115,13 +113,13 @@ class Vector:
         
         Produkty operacji:
         ------------------
-        w - list:
+        p - list:
             iloczyn wektora i skalara
         """
-        w = Vector(self.vector_size)
+        p = Vector(self.vector_size)
         for i in range(self.vector_size):
-            w.vector[i] = scalar * self.vector[i]
-        return w
+            p.vector[i] = scalar * self.vector[i]
+        return p
     
     def vec_length(self):
         """
@@ -196,10 +194,10 @@ class Vector:
             element, któreg przynależność jest sprawdzana
         """
         for i in self.vector:
-            if i==item:
+            if i == item:
                 return True
-        return False
-        
+        else:
+            return False 
         
 #Testy klasy Vector
 
