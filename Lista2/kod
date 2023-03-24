@@ -8,7 +8,7 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 
 def password():
     """
-    Funkcja generująca losowe. 8-elementowe hasło.
+    Funkcja generująca losowe, 8-elementowe hasło.
     
     Produkty programu:
     ------------------
