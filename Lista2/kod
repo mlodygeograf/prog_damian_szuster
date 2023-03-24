@@ -1,1 +1,45 @@
+import numpy as np
+import string
+from PIL import Image
+import zipfile
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
+#Zadanie 1
+
+#Lista znaków, za pomocą których możemy utworzyć hasło.
+znaki = list(string.ascii_letters + string.digits + string.punctuation)
+
+#Pusty string, który finalnie będzie naszym hasłem.
+password = ""
+
+#Pętla, która wylosuje 8 znaków i połączy je w hasło.
+i = 0
+while i < 8:
+    k = np.random.randint(0, len(znaki))
+    password += znaki[k]
+    i += 1
+
+#Zadanie 2
+
+def mini(inp, size, outp):
+    """
+    Funckja tworząca miniaturę obrazu.
+    
+    Parametry:
+    ----------
+    inp - str:
+        adres obrazu, którego miniaturę chcemy otrzymać
+    size - list:
+        wektor zawierający długość i szerokość miniatury
+    outp - str:
+        adres docelowy miniatury
+    
+    Produkty programu:
+    ------------------
+    obraz - PIL.JpegImagePlugin.JpegImageFile
+        miniatura obrazu
+    """
+    obraz = Image.open(inp)
+    obraz.thumbnail(size)
+    obraz.save(outp + ".jpg", "JPEG")
+    return obraz
