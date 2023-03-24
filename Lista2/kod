@@ -6,18 +6,29 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 
 #Zadanie 1
 
-#Lista znaków, za pomocą których możemy utworzyć hasło.
-znaki = list(string.ascii_letters + string.digits + string.punctuation)
+def password():
+    """
+    Funkcja generująca losowe. 8-elementowe hasło.
+    
+    Produkty programu:
+    ------------------
+    password - str:
+        losowe 8-elementowe hasło
+    """
+    
+    #Lista znaków, za pomocą których możemy utworzyć hasło.
+    znaki = list(string.ascii_letters + string.digits + string.punctuation)
 
-#Pusty string, który finalnie będzie naszym hasłem.
-password = ""
+    #Pusty string, który finalnie będzie naszym hasłem.
+    password = ""
 
-#Pętla, która wylosuje 8 znaków i połączy je w hasło.
-i = 0
-while i < 8:
-    k = np.random.randint(0, len(znaki))
-    password += znaki[k]
-    i += 1
+    #Pętla, która wylosuje 8 znaków i połączy je w hasło.
+    i = 0
+    while i < 8:
+        k = np.random.randint(0, len(znaki))
+        password += znaki[k]
+        i += 1
+    return password
 
 #Zadanie 2
 
