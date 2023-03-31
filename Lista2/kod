@@ -132,10 +132,39 @@ def pdf_split(path, page, name1, name2):
         split2.write(out2)
     
     return split1, split2
+    
+#Zadanie 5
+
+def watermark(file, mark, size):
+    """
+    Program dodający do grafiki znak wodny.
+    
+    Parametry:
+    ----------
+    file: str:
+        adres grafiki, do której będzie dołączany znak wodny
+    mark: str:
+        adres znaku wodnego
+    size: list:
+        wektor zawierający długość i szerokość znaku wodnego
+    """
+    photo = Image.open(file)
+    water = Image.open(mark)
+    water.thumbnail(size)
+    photo.paste(water)
+    return photo
 
 #Zadanie 6
 
 def slupek(dzialanie):
+    """
+    Program konwertujący działanie, podane w formie ciągu znaków, na odpowiedni <<słupek>>.
+    
+    Parametry:
+    ----------
+    dzialanie: str:
+        ciąg znaków, stanowiących konwertowane działanie
+    """
     operators = ["+", "-", "*", "/", ":"]
     znaki = []
     for x in dzialanie:
