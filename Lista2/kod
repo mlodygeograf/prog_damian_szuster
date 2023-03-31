@@ -85,14 +85,14 @@ def zipp(catalogue, location=0):
         os.chdir(location)
 
     #Tworzenie archiwum i przesyłanie kopii plików do niego
-    zip_copy = zipfile.ZipFile(name, 'w')
+    archive = zipfile.ZipFile(name, 'w')
     os.chdir(catalog_name)
 
     for file in os.listdir():
-        zip_copy.write(file)
+        archive.write(file)
 
-    zip_copy.close()
-    return zip_copy
+    archive.close()
+    return archive
     
 #Zadanie 4
 
