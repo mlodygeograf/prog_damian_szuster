@@ -54,3 +54,43 @@ def mini(inp, size, outp):
     obraz.thumbnail(size)
     obraz.save(outp + ".jpg", "JPEG")
     return obraz
+
+#Zadanie 3
+
+def zipp(catalogue, location=0):
+    """
+    Funkcja tworząca kopie bezpiczeństwa katalogu i pakująca je do archiwum zip.
+    
+    Parametry:
+    ----------
+    catalogue: str:
+        adres katalogu, nad którym program będzie pracował
+    location: str:
+        adres, do którego zostanie przesłane archiwum
+    """
+    time = datatime.date.today()
+    i = 0
+    file_name = ""
+
+    #Znajdowanie nazwy katalogu
+    while True:
+        if catalogue[::-1][i] in '\/':
+            break
+        file_name += catalogue[::-1][i]
+        i += 1
+
+    name = str(date) + ' copy - ' + file_name + '.zip'
+    
+    if location != 0:
+        os.chdir(location)
+
+    #Tworzenie archiwum i przesyłanie kopii plików do niego
+    zip_copy = zipfile.ZipFile(name, 'w')
+    os.chdir(catalog_name)
+
+    for file in os.listdir():
+        zip_copy.write(file)
+
+    zip_copy.close()
+    return zip_copy
+    
