@@ -131,3 +131,39 @@ def pdf_split(path, page, name1, name2):
         split2.write(out2)
     
     return split1, split2
+
+#Zadanie 6
+
+def slupek(dzialanie):
+    operators = ["+", "-", "*", "/", ":"]
+    znaki = []
+    for x in dzialanie:
+        znaki.append(x)
+    l1, znak, l2 = [], [], []
+    i = 0
+    while i < len(znaki):
+        l1.append(znaki[i])
+        i += 1
+        if znaki[i] in operators:
+            znak.append(znaki[i])
+            break
+    j = len(l1)+1
+    while j < len(znaki):
+        l2.append(znaki[j])
+        j += 1
+    liczba1, liczba2 = "", ""
+    for a in l1:
+        liczba1 += a
+    for b in l2:
+        liczba2 += b
+    y = max(len(liczba1), len(liczba2))
+    z = min(len(liczba1), len(liczba2))
+    koniec = (y+2) * "-"
+    if len(liczba1) >= len(liczba2):
+        print(2 * " " + liczba1)
+        print(str(znak[0]) + (y-z+1) * " " + liczba2)
+        print(koniec)
+    else:
+        print(2 * " " + liczba2)
+        print(str(znak[0]) + (y-z+1) * " " + liczba1)
+        print(koniec)
