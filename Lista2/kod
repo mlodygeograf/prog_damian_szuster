@@ -94,3 +94,40 @@ def zipp(catalogue, location=0):
     zip_copy.close()
     return zip_copy
     
+#Zadanie 4
+
+def pdf_split(path, page, name1, name2):
+    """
+    Program dzielący plik pdf na dwa mniejsze dokumenty.
+    
+    Parametry:
+    ----------
+    path - str:
+        adres pliku pdf przeznaczonego do podziału
+    page - list:
+        lista z numerami stron, będących początkami kolejnych mniejszych plików
+    name1 - str:
+        nazwa pierwszego z plików pdf po podziale
+    name2 - str:
+        nazwa drugiego z plików pdf po podziale
+    """
+    #Wczytywanie pliku pdf.
+    pdf0 = PdfReader(path)
+    n = pdf0.numPages
+    
+    #Tworzenie dwóch nowych, pustych dokumentów
+    split1, split2 = PdfWriter(), PdfWriter()
+    
+    for i in range(0, page-1):
+        num = pdf0.getPage(i)
+        split1.addPage(num)
+    with open(name1, "w") as out1:
+        split1.write(out1)
+        
+    for j in range(page, n):
+        num = pdf0.getPage(j)
+        split2.addPage(num)
+    with open(name2, "w") as out2:
+        split2.write(out2)
+    
+    return split1, split2
