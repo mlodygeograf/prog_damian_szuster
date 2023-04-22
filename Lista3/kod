@@ -1,1 +1,49 @@
+from PyPDF2 import PdfWriter
+import qrcode
+import cv2
+from bs4 import BeautifulSoup
+import webbrowser
+import requests
 
+#Zadanie 2
+def unix_to_windows(plik, convert):
+    unix = b"\n"    
+    windows = b"\r\n"        
+    with open(plik, 'rb') as open_file:
+        file = open_file.read()
+    if convert == True:
+        file = file.replace(unix, windows)
+    if convert == False:
+        file = file.replace(windows, unix)
+    with open(plik, 'wb') as open_file:
+        open_file.write(file)
+
+#Zadanie 3
+def lacznik_pdf(pliki, file):
+    pdf_out = PdfWriter()
+    for pdf in pliki:
+        pdf_out.append(pdf)
+    pdf_out.write(file)
+    pdf_out.close()
+
+#Zadanie 4
+def qr_code(data, version = 1, box_size = 10, border = 4):
+    kod = qrcode.QRCode(version, error_correction = qrcode.constants.ERROR_CORRECT_H, box_size, border)
+    kod.add_data(data)
+    
+#Zadanie 6
+def random_wiki():
+    while True:
+        wiki = requests.get("https://en.wikipedia.org/wiki/Special:Random")
+        soup = BeautifulSoup(wiki.content, 'html.parser')
+        ttl = soup.find(class_="firstHeading").text
+        odp = input('{} \nCzy chcesz otworzyć tą stronę? [tak/nie]  '.format(ttl)).lower()
+        if odp == 'tak':
+            print("Już się robi...")
+            webbrowser.open("https://en.wikipedia.org/wiki/{}".format(ttl))
+            break
+        elif odp == 'nie':
+            print('A co powiesz na to?')
+        else:
+            print('Eee... ok?')
+            break    
