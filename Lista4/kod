@@ -1,1 +1,74 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+from ipywidgets import interact, IntSlider, FloatSlider
+import networkx as nx
+import imageio
 
+#Zadanie 1
+def model_ode(x, t, beta, sigma, gamma):
+    S, E, I, R = x
+    N = sum(x)
+    dsdt = -beta*S*I/N
+    dedt = beta*S*I/N - sigma*E
+    didt = sigma*E - gamma*I
+    drdt = gamma*I
+    rozniczki = [dsdt, dedt, didt, drdt]
+    return rozniczki
+    
+def seir(N, S0, E0, I0, R0, beta, sigma, gamma):
+    t = np.arange(0,100,1)
+    X0 = [S0, E0, I0, R0]
+    solution = odeint(model_ode, X0, t, args = (beta, sigma, gamma))
+    return solution
+
+#Wykres dla konkretnego zestawu parametrów.
+t = np.arange(0,100,1)
+y = seir(1000,999,1,0,0,1.34,0.19,0.34)
+s, e, i, r = [], [], [], []
+for j in t:
+    s.append(y[j][0])
+    e.append(y[j][1])
+    i.append(y[j][2])
+    r.append(y[j][3])
+    
+plt.plot(t,s,label="Susceptible")
+plt.plot(t,e,label="Exposed")
+plt.plot(t,i,label="Infectious")
+plt.plot(t,r,label="Recovered")
+plt.title("SEIR Model")
+plt.legend(loc="best")
+plt.grid()
+plt.show()
+
+#Ogólny model
+def tracks(N, S0, E0, I0, R0, beta, sigma, gamma, t):
+    T = np.arange(0,t,1)
+    X0 = [S0, E0, I0, R0]
+    solution = odeint(model_ode, X0, T, args = (beta, sigma, gamma))
+    S, E, I, R = [], [], [], []
+    for i in T:
+        S.append(solution[i][0])
+        E.append(solution[i][1])
+        I.append(solution[i][2])
+        R.append(solution[i][3])
+    plt.plot(T,S,label="Susceptible")
+    plt.plot(T,E,label="Exposed")
+    plt.plot(T,I,label="Infectious")
+    plt.plot(T,R,label="Recovered")
+    plt.title("SEIR Model depending on parameters' variety")
+    plt.legend(loc="best")
+    plt.grid()
+    plt.show()
+    
+interact(tracks, 
+        S0 = IntSlider(min = 0, max = 1000000, step = 1, value = 999, description = "Susceptible"),
+        E0 = IntSlider(min = 0, max = 1000000, step = 1, value = 1, description = "Exposed"),
+        I0 = IntSlider(min = 0, max = 1000000, step = 1, value = 0, description = "Infectious"),
+        R0 = IntSlider(min = 0, max = 1000000, step = 1, value = 0, description = "Recovered"),
+        N = IntSlider(min = 0, max = 38000000, step = 1, value = 1000, description = "Population"),
+        beta = FloatSlider(min = 0, max = 5, step = 0.01, value = 1.34, description = "Beta"),
+        sigma = FloatSlider(min = 0, max = 5, step = 0.01, value = 0.19, description = "Sigma"),
+        gamma = FloatSlider(min = 0, max = 5, step = 0.01, value = 0.34, description = "Gamma"),
+        t = IntSlider(min = 1, max = 730, step = 1, value = 100, description = "Timespan")
+        )
