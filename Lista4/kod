@@ -75,16 +75,21 @@ interact(tracks,
 
 #Zadanie 4
 
-#Przykładowy graf z agentem
 atlas = nx.graph_atlas_g()
 q = len(atlas)
 m = np.random.randint(0,q-1)
 graph = atlas[m]
 
-nodes = list(graph.nodes)
-l = len(graph)
-p = np.random.randint(0,l-1)
-kolory = ["red" if node == p else "blue" for node in nodes]
+def walk():
+    nodes = list(graph.nodes)
+    l = len(graph)
+    p = np.random.randint(0,l-1)
+    sasiad = graph.neighbors(p)
+    neighbors = [n for n in sasiad]
+    a = np.random.randint(0,len(neighbors)-1)
+    nast = neighbors[a]
+    kolory = ["red" if node == nast else "blue" for node in nodes]
+    return kolory
 
-nx.draw(graph, node_color = kolory, with_labels = True)
+nx.draw(graph, node_color = walk(), with_labels = True)
 plt.show()
