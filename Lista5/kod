@@ -12,7 +12,7 @@ def konwerter():
         waluty['złoty (Poland)'] = 1
 
         try:
-            os.remove('exchange_rates.json')
+            os.remove('kursy_walut.json')
         except FileNotFoundError:
             pass
 
@@ -33,7 +33,7 @@ def konwerter():
     okno.config(bg = 'dark orange')
     okno.resizable(False, False)
 
-    text = tk.Label(okno, text = 'Choose currencies and enter the value', font = 'Calibri 20', height = 2, bg = 'dodger blue')
+    text = tk.Label(okno, text = 'Choose currencies and enter the value', font = 'Terminal', height = 2, bg = 'dodger blue')
     text.grid(row = 0, column = 0, columnspan = 6)
 
     waluta1 = tk.StringVar()
@@ -47,27 +47,27 @@ def konwerter():
     menu2.grid(row = 1, column = 3, columnspan = 3)
 
     val1 = tk.Entry(okno)
-    val1.config(width = 12, font = 'Calibri 25', justify = 'center', bd = 3)
+    val1.config(width = 12, font = 'Arial 25', justify = 'center', bd = 3)
     val1.grid(row = 2, column = 0, columnspan = 2)
 
-    empty = tk.Label(okno, bg = 'white', font = 'Calibri 25', width = 12)
+    empty = tk.Label(okno, bg = 'white', font = 'Arial 25', width = 12)
     empty.grid(row = 2, column = 4, columnspan = 2)
 
     def przelicz():
         try:
             result = round((float(val1.get()) * waluty[waluta1.get()] / waluty[waluta2.get()]), 2)
-            val2 = tk.Label(okno, text = result, width = 12, font = 'Calibri 25', fg = "blue", bg = 'white')
+            val2 = tk.Label(okno, text = result, width = 12, font = 'Arial 25', fg = "blue", bg = 'white')
             val2.grid(row = 2, column = 4, columnspan = 2)
 
         except KeyError:
             erf1 = tk.Label(okno, text = 'No currencies chosen', font = 'Calibri 20', fg = 'white', bg = 'black')
             erf1.grid(row = 3, column = 0, columnspan = 6)
-            erf1.after(1500, erf1.destroy)
+            erf1.after(3000, erf1.destroy)
 
         except ValueError:
             erf2 = tk.Label(okno, text = 'Error in given value', font = 'Calibri 20', fg = 'white', bg = 'black')
             erf2.grid(row = 3, column = 0, columnspan = 6)
-            erf2.after(1500, erf.destroy)
+            erf2.after(3000, erf.destroy)
 
     convert = tk.Button(okno, command = przelicz, bg = 'green', text = '---->', font = 'Calibri 16 bold', width = 12, height = 1)
     convert.grid(row = 2, column = 2, columnspan = 2)
