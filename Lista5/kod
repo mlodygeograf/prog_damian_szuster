@@ -1,1 +1,78 @@
+import tkinter as tk
+import requests
+import os
+import json
 
+def konwerter():
+    try:
+        kursy = requests.get("http://api.nbp.pl/api/exchangerates/tables/A/")
+        waluty = {}
+        for curr in kursy.json()[0]['rates']:
+            waluty[curr['currency']] = curr['mid']
+        waluty['złoty (Poland)'] = 1
+
+        try:
+            os.remove('exchange_rates.json')
+        except FileNotFoundError:
+            pass
+
+        saved_info = open('kursy_walut.json', 'w')
+        json.dump(waluty, saved_info)
+        saved_info.close()
+
+    except requests.exceptions.ConnectionError:
+        try:
+            kursy = open('kursy_walut.json', 'r')
+            waluty = json.load(kursy)
+        except FileNotFoundError:
+            print('No Internet connection. Download of exchange rates unavaivable.')
+            exit()
+
+    okno = tk.Tk()
+    okno.title('*** Glasc Industries Exchanger Prestige Edition ***')
+    okno.config(bg = 'dark orange')
+    okno.resizable(False, False)
+
+    text = tk.Label(okno, text = 'Choose currencies and enter the value', font = 'Calibri 20', height = 2, bg = 'dodger blue')
+    text.grid(row = 0, column = 0, columnspan = 6)
+
+    waluta1 = tk.StringVar()
+    menu1 = tk.OptionMenu(okno, waluta1, *waluty.keys())
+    menu1.config(width = 30, height = 2, font = 'Calibri 12')
+    menu1.grid(row = 1, column = 0, columnspan = 3)
+
+    waluta2 = tk.StringVar()
+    menu2 = tk.OptionMenu(okno, waluta2, *waluty.keys())
+    menu2.config(width = 30, height = 2, font = 'Calibri 12')
+    menu2.grid(row = 1, column = 3, columnspan = 3)
+
+    val1 = tk.Entry(okno)
+    val1.config(width = 12, font = 'Calibri 25', justify = 'center', bd = 3)
+    val1.grid(row = 2, column = 0, columnspan = 2)
+
+    empty = tk.Label(okno, bg = 'white', font = 'Calibri 25', width = 12)
+    empty.grid(row = 2, column = 4, columnspan = 2)
+
+    def przelicz():
+        try:
+            result = round((float(val1.get()) * waluty[waluta1.get()] / waluty[waluta2.get()]), 2)
+            val2 = tk.Label(okno, text = result, width = 12, font = 'Calibri 25', fg = "blue", bg = 'white')
+            val2.grid(row = 2, column = 4, columnspan = 2)
+
+        except KeyError:
+            erf1 = tk.Label(okno, text = 'No currencies chosen', font = 'Calibri 20', fg = 'white', bg = 'black')
+            erf1.grid(row = 3, column = 0, columnspan = 6)
+            erf1.after(1500, erf1.destroy)
+
+        except ValueError:
+            erf2 = tk.Label(okno, text = 'Error in given value', font = 'Calibri 20', fg = 'white', bg = 'black')
+            erf2.grid(row = 3, column = 0, columnspan = 6)
+            erf2.after(1500, erf.destroy)
+
+    convert = tk.Button(okno, command = przelicz, bg = 'green', text = '---->', font = 'Calibri 16 bold', width = 12, height = 1)
+    convert.grid(row = 2, column = 2, columnspan = 2)
+
+    koniec = tk.Button(okno, text = 'Zakończ', command = exit, width = 20, height = 1, font = 'Calibri 20 bold', bg = '#cc0000')
+    koniec.grid(row = 4, column = 0, columnspan = 6)
+
+    okno.mainloop()
