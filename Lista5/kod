@@ -55,7 +55,7 @@ def konwerter():
 
     def przelicz():
         try:
-            result = round((float(val1.get()) * waluty[waluta1.get()] / waluty[waluta2.get()]), 2)
+            result = round((float(val1.get()) * waluty[waluta1.get()] / waluty[waluta2.get()]), 4)
             val2 = tk.Label(okno, text = result, width = 12, font = 'Arial 25', fg = "blue", bg = 'white')
             val2.grid(row = 2, column = 4, columnspan = 2)
 
@@ -72,7 +72,7 @@ def konwerter():
     convert = tk.Button(okno, command = przelicz, bg = 'green', text = '---->', font = 'Calibri 16 bold', width = 12, height = 1)
     convert.grid(row = 2, column = 2, columnspan = 2)
 
-    koniec = tk.Button(okno, text = 'Zakończ', command = exit, width = 20, height = 1, font = 'Calibri 20 bold', bg = '#cc0000')
+    koniec = tk.Button(okno, text = 'Zakończ', command = okno.destroy, width = 20, height = 1, font = 'Calibri 20 bold', bg = '#cc0000')
     koniec.grid(row = 4, column = 0, columnspan = 6)
 
     okno.mainloop()
