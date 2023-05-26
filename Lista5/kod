@@ -67,7 +67,7 @@ def konwerter():
         except ValueError:
             erf2 = tk.Label(okno, text = 'Error in given value', font = 'Calibri 20', fg = 'white', bg = 'black')
             erf2.grid(row = 3, column = 0, columnspan = 6)
-            erf2.after(3000, erf.destroy)
+            erf2.after(3000, erf2.destroy)
 
     convert = tk.Button(okno, command = przelicz, bg = 'green', text = '---->', font = 'Calibri 16 bold', width = 12, height = 1)
     convert.grid(row = 2, column = 2, columnspan = 2)
