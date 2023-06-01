@@ -1,1 +1,113 @@
+import pygame
+import random
+import sys
 
+pygame.init()
+
+width = 800
+height = 600
+color0 = (0,0,255)
+color1 = (230, 255, 255)
+color2 = (130,150,200)
+color3 = (255, 0, 0)
+racket_width = 120
+racket_length = 20
+rx0 = 300
+ry0 = 360
+aix0 = 300
+aiy0 = 40
+vai = 5
+ball_width = 15
+ball_length = 15
+bx0 = 400
+by0 = 300
+vx = 5
+vy = 5
+FPS = 30
+player0, ai0 = "0", "0"
+font = pygame.font.Font('freesansbold.ttf', 50)
+
+window = pygame.display.set_mode(size = (width, height), depth = 32)
+pygame.display.set_caption("Wimbledon Pong Championship")
+
+racket = pygame.Surface([racket_width, racket_length])
+racket.fill(color0)
+surface = racket.get_rect()
+surface.x = rx0
+surface.y = ry0
+
+ball = pygame.Surface([ball_width, ball_length], pygame.SRCALPHA, 32).convert_alpha()
+pygame.draw.ellipse(ball, color2, [0, 0, ball_width, ball_length])
+ball_surface = ball.get_rect()
+ball_surface.x = bx0
+ball_surface.y = by0
+
+ai = pygame.Surface([racket_width, racket_length])
+racket.fill(color3)
+ai_surface = racket.get_rect()
+ai_surface.x = aix0
+ai_surface.y = aiy0
+
+clock = pygame.time.Clock()
+
+def player_score():
+    score = font.render(player0, True, (0,0,0))
+    table = score.get_rect()
+    table.center = (width * 0.5, height * 0.8)
+    window.blit(score, table)
+
+def ai_score():
+    score = font.render(ai0, True, (0,0,0))
+    table = score.get_rect()
+    table.center = (width * 0.5, height * 0.2)
+    window.blit(score, table)
+
+events = pygame.event.get()
+while True:
+    for cos in events:
+        if cos.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if cos.type == pygame.MOUSEMOTION:
+            X, Y = cos.pos
+            move = X - (racket_width / 2)
+            if move > width - racket_width:
+                move = width - racket_width
+            if move < 0:
+                move = 0  
+        
+            surface.x = move
+            
+    ball_surface.move_ip(vx, vy)
+    if ball_surface.right >= width:
+        vx *= -1
+    if ball_surface.left <= 0:
+        vx *= -1
+    if ball_surface.top <= 0:
+        ball_surface.x = width / 2 
+        ball_surface.y = height / 2
+        player0 = str(int(player0) + 1)
+    if ball_surface.bottom >= height:
+        ball_surface.x = width / 2
+        ball_surface.y = height / 2
+        ai0 = str(int(ai0) + 1)
+    if ball_surface.centerx > ai_surface.centerx:
+        ai_surface.x += vai
+    elif ball_surface.centerx < ai_surface.centerx:
+        ai_surface.x -= vai
+    if ball_surface.colliderect(ai_surface):
+        vy *= -1
+        ball_surface.top = ai_surface.bottom
+    if ball_surface.colliderect(surface):
+        vy *= -1
+        ball_surface.bottom = surface.top
+    
+    
+    window.fill(color1)
+    player_score()
+    ai_score()
+    window.blit(racket, surface)
+    window.blit(ai, ai_surface)
+    window.blit(ball, ball_surface)
+    pygame.display.update()
+    clock.tick(FPS)
